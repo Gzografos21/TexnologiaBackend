@@ -11,5 +11,22 @@ namespace BackendTexnologia
         private bool accepted;
         private int earnedPointsInvitations;
         private string sendingInvitationDate;
+
+        public bool sendInvitation()
+        {
+
+        }
+
+        public bool saveInvitation()
+        {
+
+        }
+
+        public bool newSignUpCheck()
+        {
+
+        }
+
+        //edw tha kaleitai i increasePoints() tis klasis Points
     }
 }

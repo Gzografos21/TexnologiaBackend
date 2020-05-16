@@ -15,5 +15,16 @@ namespace BackendTexnologia
         private string description;
         private int numberOfPosts;
         private int numberOfFavorites;
+
+        public bool uploadPostToUserProfile()
+        {
+
+        }
+
+        public bool saveToFavorites()
+        {
+
+        }
+
     }
 }
