@@ -5,7 +5,8 @@ using System.Web;
 
 namespace BackendTexnologia
 {
-    public class Basic
+    public class Basic : Account
     {
+
     }
 }

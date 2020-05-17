@@ -16,5 +16,26 @@ namespace BackendTexnologia
         private string information;
         private bool photos;
         private int earnedPointsUploadFiloxenia;
+
+        public bool checkSquareMeters()
+        {
+
+        }
+
+        public bool checkForUploadedPhotos()
+        {
+
+        }
+
+        public bool saveRoomToUploadedRoomsToFiloxenia()
+        {
+
+        }
+
+        public bool increasePoints()
+        {
+
+        }
+
     }
 }
