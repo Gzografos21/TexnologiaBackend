@@ -9,6 +9,7 @@ namespace BackendTexnologia
     {
         private string destination;
         private int persons;
+        private string countryOfDeparture;
         private int earnedPointsTravelPackage;
 
         public bool checkForTravelPackage()
