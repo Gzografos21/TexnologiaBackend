@@ -9,20 +9,29 @@ namespace BackendTexnologia
     {
         private string dateOfDeparture;
         private string dateOfArrival;
-        private double totalAmountOfMoney;
         private bool freeChangeToDates;
 
-        public string retrieveReservations()
+        public List<string> retrieveReservations(string userID)//to userID to pairnoume kathe fora metaxu twn selidwn me session
         {
             {
-
-                //otan thelei na kanei allagi kratisis to sustima epikoinwnei me tin vasi dedomenwn twn kratisew kai anakta oles tis kratiseis pou exei kanei o xristis
                 //endeiktikes entoles gia to pws tha mporouse na ginei enas elegxos sti vasi gia ta reservations
                 bool check = false;
+                //exoume mia upothetiki vasi pou onomazetai TexnologiaVasi
+                //tha kanoume 4 select sta 4 upothetika tables: reservedTickets, reservedHostels, reservedRoomsToFiloxenia, reservedTravelPackages
+
+
+
+                //1o select gia tin reservedTickets
+
+
+                List<string> listAll = new List<string>();
                 try
                 {
+                    //theloume gia paradeigma na paroume ta stoixeia tis kratisis EISITIRIOU enos sugekrimenou xristi
+                    //tote tha mpoume sto table reservedTickets kai tha paroume ola ta dedomena me select gia to sugekrimeno userid
+                    
                     string reserv;
-                    string connectionString = @"server=localhost;user id=root; password=****; persistsecurityinfo=True;database=leafletdb";
+                    string connectionString = @"server=localhost;user id=root; password=****; persistsecurityinfo=True;database=TexnologiaVasi";
                     MySqlConnection cnn = new MySqlConnection(connectionString);
                     cnn.Open();
                     //Vazw ws onoma sto select na pairnei to id tou sugekrimenou xristi gia tin sugkekrimeni kratisi
@@ -30,37 +39,43 @@ namespace BackendTexnologia
                     //apo tin klasi User mporoume na metaferoume to userid xrisimopoiontas session
                     //kai meta na apothikeusoume to session se mia metabliti pou tha tin onomasoume userID
 
-                    string userid;
-                    //tha prepei na uparxei ena table xexwristo gia tis kratiseis aspoume oti legetai reservations opou kai auti tha kleironomei to userid tou xristi etsi wste na 
-                    //mporei na pairnei ta stoixeia tis kratisis tou sugekrimenou xristi
-                    //to userid tha pernietai se auti ti selida me session
-                    string sql = "Select reservation from reservations where userid='" + userid+ "'";
+                    string sql = "Select  * from reservedTickets where userid='" + userID + "'";
                     MySqlCommand command = new MySqlCommand(sql, cnn);
                     MySqlDataReader dataReader = command.ExecuteReader();
                     while (dataReader.Read())
                     {
-                        if (dataReader[0].ToString() == InsertUserName)
-                        {
-                            check = true;
-                        }
+                        listAll.Add(dataReader[0].ToString());
                     }
+
+                    cnn.Close();//edw kleinoume ti sindesi me ti vasi
+
+                    return listAll;
+
                 }
                 catch
                 {
-                    check = true;
+                    listAll = "Error";
+                    return listAll;
                 }
-                return check;
+
+                //2o select gia tin reservedHostels
+                //omoiws gia ta upoloipa selects me ta antistoixa tous orismata
+                
+                
             }
 
         }
 
-        public bool checkAvailability()
+        public abstract bool checkAvailability() //givrgos
         {
-            //elegxoume sti vasi me select an uparxei diathesimotita opws kai stin retrieveReservations()
-
+ 
         }
 
-        public bool saveReservation()
+        public abstract bool displayResults()  //giorgos
+        {
+
+        }
+        public abstract bool saveReservation()
         {
             //edw tha ginetai xana sundesi me ti vasi kai tha apothikeuontai oi kratiseis sti vasi me insert
             //sto sugekrimeno simeio ginetai arketa periploko
@@ -71,22 +86,10 @@ namespace BackendTexnologia
 
         }
 
-        public bool saveReservationChange()
-        {
-            //einai bool giati theloume na mathoume apo tin epistrofi tis metablitis an ontws egine save sti vasi i kratisi
-            //kai tha exoume try catch gia pithana errors sti vasi dedomenwn
-        }
-
         //edw analoga me to an exei ginei kratisi tote tha kaleitai pali i methodos increasePoints() gia na parei extra pontous apo tin kratisi
 
-        public static void Points() // dimiourgoume ena event apo ta asp buttons ston designer
-        {
-            // tha kalei edw mesa ti methodo increasePoints apo tin klasi Points
-            //endeiktikes entoles
-            string increase;
-            Points inc = new Points();
-            Increase = inc.increasePoints();//mesa stin parenthesi xreiazontai orismata, analoga ti pairnei i methodos increase
-        }
+  
+          
     }
 
 }
