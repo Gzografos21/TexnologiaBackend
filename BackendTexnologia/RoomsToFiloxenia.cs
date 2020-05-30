@@ -11,40 +11,142 @@ namespace BackendTexnologia
         private string country;
         private string ownerName;
         private int persons;
-        private int days;
         private int earnedPointsReservationFiloxenia;
 
-        public bool checkAvailability()
-        {
-            //epistrefei true i false analoga me ton an uparxei diathesimotita
+        string connectionString = @"server=localhost;user id=root; password=****; persistsecurityinfo=True;database=TexnologiaVasi";//to bgazw apexw gia na mporw na to xrisimopoiw kathe fora pou xreiazetai na anoixw ti vasi
 
+        
+        public List<string> returnRooms(string city, string country, int persons, DateTime dateOfDeparture, DateTime dateOfArrival)
+        {
+
+            List<string> listAll = new List<string>();//orizoume mia keni lista opou mesa tha apothikeusoume ta diathesima dwmatia
+
+            //to table me titlo Rooms pou exei apothikeumena ta anartimena dvmatia tvn xristwn exei stiles to roomID(primary key), userID(foreign key), city, country, persons, startingDate, endingDate, information, square, uploadedPhotos
+                try
+                {
+                    MySqlConnection cnn = new MySqlConnection(connectionString);// dimiourgoume to connection me ti vasi xrisimopoiwntas to connection string pou einai exw apo ti methodo
+                    cnn.Open();//anoigei ti vasi me to cnn opou to cnn einai to mysqlconnection me orisma connectionString to opoio connection string 
+                               //deixnei pou tha paei gia na sundethei me ti sugekrimeni vasi pou exw ftiaxei gia to sustima
+                    string sql = "Select userID, City, Country, startingDate, endingDate, Persons, Information, square, uploadedPhotos from Rooms where City='" + city + "' AND Country= '" + country + "' AND startingDate=" + dateOfDeparture + "'AND endingDate='" + dateOfArrival + "' AND Persons= '" + persons + "'" ;//einai ena aplo string pou tha xrisimopoithei ws query
+                    MySqlCommand command = new MySqlCommand(sql, cnn);//arxikopoioume to command pou xrisimopoiei ti vilviothiki MySqlCommand i opoia exei 2 orismata
+                    MySqlDataReader dataReader = command.ExecuteReader();//ektelei tin entoli command kai to apotelesma to apothikeuei se enan reader tis mysql
+
+                    while (dataReader.Read())
+                    {
+                        listAll.Add(dataReader[1].ToString()); //kratame to userID tou xristi pou anevase to dwmatio etsi vste otan theloume na emfanisoume ta diathesima dwmatia na xanakanoume select st table user vste na paroume to name tou
+                        listAll.Add(dataReader[2].ToString());
+                        listAll.Add(dataReader[3].ToString());
+                        listAll.Add(dataReader[4].ToString());
+                        listAll.Add(dataReader[5].ToString());
+                        listAll.Add(dataReader[6].ToString());
+                        listAll.Add(dataReader[7].ToString());
+                        listAll.Add(dataReader[8].ToString());
+                        listAll.Add(dataReader[9].ToString());
+                }
+
+                    cnn.Close();//edw kleinoume ti sindesi me ti vasi
+                }
+                catch
+                {
+                    listAll.Add("Error");
+                    //return listid;
+                }
+         
+            return listAll;
+        }
+        //se auto to simeio ginetai to display twn eisitiriwn
+
+        public string getListAllRooms()
+        {
+            List<string> returnedlist = new List<string>();
+            returnedlist = RoomsToFiloxenia.returnRooms();
+            string allresultsasstring = "";
+
+            for (var i = 0; i < returnedlist.Count(); i++)
+            {
+                allresultsasstring += i + " στοιχείο:" + returnedlist[i] + ",";
+            }
+       
         }
 
-        //edw kaloume ti methodo tis reservation me onoma saveReservation()
-        //endeiktikes entoles
-
-        //an ginetai me click analoga to id tou click sto koumpi pou uparxei stin asp einai san na kaleitai i BtnReserv_Click kata to patima tou koumpiou
-
-        protected void BtnReserv_Click(object sender, EventArgs e) // dimiourgoume ena event apo ta asp buttons ston designer
+        //gia na ginei save reservation prepei o xristis na exei epilexei dvmatio gia kratisi
+ 
+        public bool saveReservation(string city, string country, int persons, DateTime dateOfDeparture, DateTime dateOfArrival)
         {
-            // tha kalei edw mesa ti methodo saveReservation apo tin klasi Reservation
-            //endeiktikes entoles
-            string reserv;
-            Reservation rs = new Reservation();
-            Reserv = rs.saveReservation();//mesa stin parenthesi xreiazontai orismata, analoga ti pairnei i methodos saveReservation 
 
+            //edw ftiaxnoume ena table pou tha legetai ReservedRooms opou tha pairnei to userid tou xristi apo to table Users kai me vasi auto tha exei stiles
+            //endeiktiki entoli tis sql gia tin enwsi duo table
+            //Select tblUsers.Name,tblUsers.Lastname, tblReservedRooms.Departure from ReservedRooms join tblUsers on tblReservedTickets.UserID = tblUsers.UserID; 
+            //userid, ticketid, departure, arrival, departureDate, arrivalDate, Company, departurePrice, arrivalPrice, travelMethod
+            //ara gia na ginei i kratisi tha prepei na epilexei o xristis ena apo ta diathesima dwmatia pou tou kaname "Display", to pws tha ginei afora kommati tou Frontend
+            //estw loipon oti apothikeuetai se mia metavliti selectedRooms to id tis sugekrimenis kratisis tou xristi
+
+            //apothikeuoume to userID tou xristi pou kanei tin kratisi dwmatiou
+          
+            bool checksavedReserv = false;
+            
+                try
+                {
+                    MySqlConnection cnn = new MySqlConnection(connectionString);
+                    cnn.Open();
+                    string sql = "INSERT INTO ReservedRooms (userID, City, Country, DepartureDate, ArrivalDate, Persons) VALUES('" + userID + "''" + city + "', '" + country + "', '" + dateOfDeparture+ "','" + dateOfArrival + "','" + persons + "'";
+                    MySqlCommand command = new MySqlCommand(sql, cnn);
+                    command.ExecuteCommand();
+                    cnn.Close();
+                    checksavedReserv = true;
+                    increasePointsReservationFiloxenia(userID, 2000);
+                    return checksavedReserv;
+                    //an den upirxe provlima sti vasi epistrefei true
+                    //alliws pigenei sto catch kai epistrefei tin arxikopoiimeni timi false
+
+                }
+                catch
+                {
+                    return checksavedReserv;
+                }
         }
 
-        //antistoixa gia to increase points
-        protected void BtnIncr_Click(object sender, EventArgs e) // dimiourgoume ena event apo ta asp buttons ston designer
+        public void increasePointsReservation(int userID, int collectedPoints)
         {
-            // tha kalei edw mesa ti methodo increasePoints apo tin klasi Points
-            //endeiktikes entoles
-            string increase;
-            Points inc = new Points();
-            Increase = inc.increasePoints();//mesa stin parenthesi xreiazontai orismata, analoga ti pairnei i methodos increase
+            //exoume allo ena upothetiko table gia tous pontous tou xristi, opou mesa tha exei to userid tou xristi kai tous sunolikous tou pontous
+            //tha kalesoume tin saveReservation kai me vasi to checksavedReserv an einai true i false tha proxwrisoume
+            //kathws o xristis pairnei pontous an exei oloklirwthei i kratisi (na uparxei diathesimotita kai na exei ginei plirwmi opou ola auta elegxontai stin saveReservation)
+            string checkSaved = "";
+            RoomsToFiloxenia rf = new RoomsToFiloxenia();
+            checkSaved = rf.saveReservation();
 
+            if (checkSaved == true)
+            {
+                //kaloume tin increasePoints apo tin klasi Points
+
+
+                //an isxuei i sunthiki gia kathe oloklirwmeni kratisi eisitiriwn pairnei 1500 pontous ara to vazoume default
+                int earnedPointsReservationFiloxenia = 2000;
+                //edw tha ginei select apo to table me tous pontous kai tha to apothikeui se mia metavliti savedPoints
+                List<int> PointTable = new List<int>();
+
+                PointTable = Points.getUsersPoints(userID);
+                int pointid = 0;
+                int userspoints = 0;
+                //for (int i; i < Pointtable.Count(); i++)
+                //{
+                pointid = Pointtable[0];//id=5
+                userspoints = Pointtable[1];//collectedpoints = 8000
+                //}
+                int newpointstobesaved = 0;
+                newpointstobesaved = earnedPointsTickets + userpoints;
+
+                Points.saveNewPoints(pointid, newpointstobesaved);
+            }
         }
+        public bool saveReservationChange()
+        {
+            //Gia na ginei i allagi kratisis tha prepei na xanaginei oli i diadikasia elegxou diathesimotitas gia tis nees imerominies 
+            //kai na kalountai opoies methodoi xreiazontai xana
+            //efoson uparxei diathesimotita
+            //an o xristis kanei allagi se imerominies eisitiriwn tote tha kanei update tis kainouries imerominies sto table ReservedRooms
+        }
+
 
     }
 }
