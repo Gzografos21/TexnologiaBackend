@@ -10,7 +10,7 @@ namespace BackendTexnologia
         private string emailFriend;
         private bool accepted;
         private int earnedPointsInvitations;
-        private string sendingInvitationDate;
+        private DateTime sendingInvitationDate;
         //Auta ta duo attributes ta orizoume gia na min mas bgazei suntantiko error
         //tha ta xreiastoume parakatw
         //ousiastika auta ta exei pliktrologisei o xristis kai auta vriskontai stin klasi user
@@ -29,7 +29,7 @@ namespace BackendTexnologia
 
         string connectionString = @"server=localhost;user id=root; password=****; persistsecurityinfo=True;database=TexnologiaVasi";
 
-        public void saveInvitation(string email, int userID, string sendingInvitationDate)
+        public bool saveInvitation(string email, int userID, string sendingInvitationDate)
         {
             //edw dimiourgoume ena table gia ta invitations tou xristi me titlo invitations kai stiles invitationID(primary key), userID(foreign key), emailFriend, sendingInvitationDate
             //to invitationID tha ginetai autoincrement apo ti vasi
@@ -189,12 +189,8 @@ namespace BackendTexnologia
 
             if (finalCheck == true)
             {
-                //kaloume tin increasePoints apo tin klasi Points
-
-
                 //an exei ginei apodexti i prosklisi entws 30 imerwn o xristis pairnei 500 pontous
                 int earnedPointsInvitation = 500;
-                //edw tha ginei select apo to table me tous pontous kai tha to apothikeui se mia metavliti savedPoints
                 List<int> PointTable = new List<int>();
                 //Bazoume to sugekrimeno id pou exoume parei apo tin newSignUpCheck
                 PointTable = Points.getUsersPoints(userID);//auto einai mia lista me duo pragmata. to pointID kai to sunolo twn pontwn 

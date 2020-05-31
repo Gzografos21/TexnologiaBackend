@@ -96,7 +96,7 @@ public void PageLoad(EventArgs e)
 }
 
 
-public string login(string name, string password)//bazoume orismata mesa
+public bool login(string name, string password)//bazoume orismata mesa
 {
     try
     {
