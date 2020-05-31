@@ -8,20 +8,21 @@ namespace BackendTexnologia
     public class User
     {
         private string name;
-        private string email;
-        private string password;
-        private string dateofbirth;
-        private string phone;
-        private int userID; //Auto to orizoume san metavliti edw alla pithanws na min xrisimopoiithei kapou kathws to kanoume auto-increment sti vasi kai apo ekei kanoume tous elegxous pou theloume me ta selects, ta inserts ktlp
-
+        public string email;
+        private string password;//wietjwopitj@hotmail.com
+        public DateTime dateOfBirth;
+        public string phone;
+        public int userID; //Auto to orizoume san metavliti edw alla pithanws na min xrisimopoiithei kapou kathws to kanoume auto-increment sti vasi kai apo ekei kanoume tous elegxous pou theloume me ta selects, ta inserts ktlp
+        public DateTime signupDate;
 
         //tha prepei na ginei sundesi me ti vasi 
         //kai tha uparxei pali try catch se periptwsi pou skasei error sti vasi 
         //sto epomeno paradoteo tha perasoume pio analutika neous methodous
         //gia olous tous pithanous elegxous pou xreiazontai gia na ginoun kata tin eggrafi ii ti sundesi tou xristi
 
-        public bool signUp(string name, string password, string email, string dateOfBirth)
+        public bool signUp(string name, string password, string email, DateTime dateOfBirth, DateTime signupDate)
         {
+
             //prwta tha elegxoume an uparxei o xristis kai an den uparxei tote tha kanoume insert sti vasi
             bool check = false;
             try
@@ -44,7 +45,7 @@ namespace BackendTexnologia
                 check = true;
             }
 
-            //efoson den uparxei xristis kanoume to insert sti vasi
+            //efoson den uparxei idi xristis kanoume to insert sti vasi
 
 
             if (check == true)
@@ -61,21 +62,40 @@ namespace BackendTexnologia
                 {
                     MySqlConnection cnn = new MySqlConnection(connectionString);
                     cnn.Open();
-                    string sql = "INSERT INTO users(name , password, email, dateOfBirth) VALUES('" + name + "', '" + hashedPassword + "', '" + email + "','" + dateOfBirth + "')";
+                    string sql = "INSERT INTO users(name , password, email, dateOfBirth, signupDate) VALUES('" + name + "', '" + hashedPassword + "', '" + email + "','" + dateOfBirth + "','"+ signupDate + "')";
                     MySqlCommand command = new MySqlCommand(sql, cnn);
                     command.ExecuteReader();
                     check = false;
+                    
                     return check;
+                    //Meta apo auti ti methodo sto frontend tha xrisimopoiisw to sugekrimeno email gia na dw me select kainouriou email apo ton pinaka invitations
+                    //an uparxei to sugekrimeno email ekei mesa stis 30 imeres. Kai an uparxei tha pigenei kai tha prosthetei pontous sto userID tou pinaka invitations me to sugekrimeno email
                 }
                 catch
                 {
                     return check;
                 }
             }
+            //se auto to simeio tha kaloume tin methodo returnNewEmailDate() 
+            //kai se ekeini ti methodo tha apothikeuoume to 
         }
+    }
+}
+//etsi ousiastika tha mporouse na klithei sto page load
+
+public void PageLoad(EventArgs e)
+{
+    string emailtobechecked = this.txtEmail.Text;//Esto i timi pou dinei o xristis apo javascript
+    bool chk = User.signUp("George", "Zografos", emailtobechecked, "CraetionDate");
+    string useridthatInvitedthisnewUser = InvitedFriends.CheckInvitation(emailtobechecked);
+    if (useridthatInvitedthisnewUser != "")
+    {
+        Points.increasePointsInvitedFriends(useridthatInvitedthisnewUser, 1500);
     }
 
 }
+
+
 public string login(string name, string password)//bazoume orismata mesa
 {
     try
@@ -111,6 +131,4 @@ public string login(string name, string password)//bazoume orismata mesa
     {
         return false;
     }
-
-
 }
