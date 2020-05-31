@@ -7,9 +7,11 @@ namespace BackendTexnologia
 {
     public class Reservation
     {
-        private string dateOfDeparture;
-        private string dateOfArrival;
-        private bool freeChangeToDates;
+        private DateTime dateOfDeparture;
+        private DateTime dateOfArrival;
+        private bool freeChangeToDates; //giorgos
+
+        string connectionString = @"server=localhost;user id=root; password=****; persistsecurityinfo=True;database=TexnologiaVasi";
 
         public List<string> retrieveReservations(string userID)//to userID to pairnoume kathe fora metaxu twn selidwn me session
         {
@@ -18,7 +20,6 @@ namespace BackendTexnologia
                 bool check = false;
                 //exoume mia upothetiki vasi pou onomazetai TexnologiaVasi
                 //tha kanoume 4 select sta 4 upothetika tables: reservedTickets, reservedHostels, reservedRoomsToFiloxenia, reservedTravelPackages
-
 
 
                 //1o select gia tin reservedTickets
@@ -31,7 +32,7 @@ namespace BackendTexnologia
                     //tote tha mpoume sto table reservedTickets kai tha paroume ola ta dedomena me select gia to sugekrimeno userid
                     
                     string reserv;
-                    string connectionString = @"server=localhost;user id=root; password=****; persistsecurityinfo=True;database=TexnologiaVasi";
+                  
                     MySqlConnection cnn = new MySqlConnection(connectionString);
                     cnn.Open();
                     //Vazw ws onoma sto select na pairnei to id tou sugekrimenou xristi gia tin sugkekrimeni kratisi
@@ -66,30 +67,18 @@ namespace BackendTexnologia
 
         }
 
-        public abstract bool checkAvailability() //givrgos
+        public abstract List <string> returnAvailable() 
         {
  
         }
 
-        public abstract bool displayResults()  //giorgos
+        public abstract string getListAll()  
         {
 
         }
         public abstract bool saveReservation()
-        {
-            //edw tha ginetai xana sundesi me ti vasi kai tha apothikeuontai oi kratiseis sti vasi me insert
-            //sto sugekrimeno simeio ginetai arketa periploko
-            //kathws exartatai apo to sxediasmo tis vasis gia to pws tha ginei to insert gia kathe sugekrimeno xristi 
-            //me to sugekrimeno id tou
-            //se auto to simeio arxizoun ta diafora tables tis vasis na sundeontai metaxu tous pairnontas gia paradeigma
-            //to id enos xristi kai me vasei auto na antistoixizei kai na vriskei kai alles plirofories apo alla tables
-
-        }
-
-        //edw analoga me to an exei ginei kratisi tote tha kaleitai pali i methodos increasePoints() gia na parei extra pontous apo tin kratisi
-
-  
-          
+       
+    
     }
 
 }
