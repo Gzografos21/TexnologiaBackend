@@ -16,7 +16,7 @@ namespace BackendTexnologia
         string connectionString = @"server=localhost;user id=root; password=****; persistsecurityinfo=True;database=TexnologiaVasi";//to bgazw apexw gia na mporw na to xrisimopoiw kathe fora pou xreiazetai na anoixw ti vasi
 
         
-        public List<string> returnRooms(string city, string country, int persons, DateTime dateOfDeparture, DateTime dateOfArrival)
+        public List<string> returnAvailable(string city, string country, int persons, DateTime dateOfDeparture, DateTime dateOfArrival)
         {
 
             List<string> listAll = new List<string>();//orizoume mia keni lista opou mesa tha apothikeusoume ta diathesima dwmatia
@@ -56,10 +56,10 @@ namespace BackendTexnologia
         }
         //se auto to simeio ginetai to display twn eisitiriwn
 
-        public string getListAllRooms()
+        public string getListAll()
         {
             List<string> returnedlist = new List<string>();
-            returnedlist = RoomsToFiloxenia.returnRooms();
+            returnedlist = RoomsToFiloxenia.returnAvailable(" ", " ", " ", " ", " ", " ", " ", " ", " ");
             string allresultsasstring = "";
 
             for (var i = 0; i < returnedlist.Count(); i++)
@@ -75,14 +75,14 @@ namespace BackendTexnologia
         {
 
             //edw ftiaxnoume ena table pou tha legetai ReservedRooms opou tha pairnei to userid tou xristi apo to table Users kai me vasi auto tha exei stiles
-            //endeiktiki entoli tis sql gia tin enwsi duo table
-            //Select tblUsers.Name,tblUsers.Lastname, tblReservedRooms.Departure from ReservedRooms join tblUsers on tblReservedTickets.UserID = tblUsers.UserID; 
-            //userid, ticketid, departure, arrival, departureDate, arrivalDate, Company, departurePrice, arrivalPrice, travelMethod
+           // userID, city, country, persons, startingDate, endingDate, information, square, uploadedPhotos
+
+
             //ara gia na ginei i kratisi tha prepei na epilexei o xristis ena apo ta diathesima dwmatia pou tou kaname "Display", to pws tha ginei afora kommati tou Frontend
             //estw loipon oti apothikeuetai se mia metavliti selectedRooms to id tis sugekrimenis kratisis tou xristi
 
             //apothikeuoume to userID tou xristi pou kanei tin kratisi dwmatiou
-          
+
             bool checksavedReserv = false;
             
                 try
@@ -106,7 +106,7 @@ namespace BackendTexnologia
                 }
         }
 
-        public void increasePointsReservation(int userID, int collectedPoints)
+        public void increasePointsReservationFiloxenia(int userID, int collectedPoints)
         {
             //exoume allo ena upothetiko table gia tous pontous tou xristi, opou mesa tha exei to userid tou xristi kai tous sunolikous tou pontous
             //tha kalesoume tin saveReservation kai me vasi to checksavedReserv an einai true i false tha proxwrisoume
@@ -117,12 +117,10 @@ namespace BackendTexnologia
 
             if (checkSaved == true)
             {
-                //kaloume tin increasePoints apo tin klasi Points
 
-
-                //an isxuei i sunthiki gia kathe oloklirwmeni kratisi eisitiriwn pairnei 1500 pontous ara to vazoume default
+                //an isxuei i sunthiki gia kathe oloklirwmeni kratisi dwmatiou pairnei 2000 pontous
                 int earnedPointsReservationFiloxenia = 2000;
-                //edw tha ginei select apo to table me tous pontous kai tha to apothikeui se mia metavliti savedPoints
+                
                 List<int> PointTable = new List<int>();
 
                 PointTable = Points.getUsersPoints(userID);
@@ -130,11 +128,11 @@ namespace BackendTexnologia
                 int userspoints = 0;
                 //for (int i; i < Pointtable.Count(); i++)
                 //{
-                pointid = Pointtable[0];//id=5
-                userspoints = Pointtable[1];//collectedpoints = 8000
+                pointid = Pointtable[0];
+                userspoints = Pointtable[1];
                 //}
                 int newpointstobesaved = 0;
-                newpointstobesaved = earnedPointsTickets + userpoints;
+                newpointstobesaved = earnedPointsReservationFiloxenia + userspoints;
 
                 Points.saveNewPoints(pointid, newpointstobesaved);
             }
