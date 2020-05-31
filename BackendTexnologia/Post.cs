@@ -93,7 +93,7 @@ namespace BackendTexnologia
             }
 
         }
-        public void increasePointsPost(int userID, int collectedPoints)
+        public void increasePointsPost(int userID)
         {
             //exoume allo ena upothetiko table gia tous pontous tou xristi, opou mesa tha exei to userid tou xristi kai tous sunolikous tou pontous
             //tha kalesoume tin savePost kai me vasi to checkUploadedPost an einai true i false tha proxwrisoume
@@ -104,12 +104,10 @@ namespace BackendTexnologia
 
             if (checkPost == true)
             {
-                //kaloume tin increasePoints apo tin klasi Points
-
 
                 //an isxuei i sunthiki gia kathe anartisi taxidiwtikou periexomenou pairnei 2000 pontous
                 int earnedPointsPost = 2000;
-                //edw tha ginei select apo to table me tous pontous kai tha to apothikeui se mia metavliti savedPoints
+                
                 List<int> PointTable = new List<int>();
 
                 PointTable = Points.getUsersPoints(userID);
@@ -121,7 +119,7 @@ namespace BackendTexnologia
                 userspoints = Pointtable[1];
                 //}
                 int newpointstobesaved = 0;
-                newpointstobesaved = earnedPointsPost + userpoints;
+                newpointstobesaved = earnedPointsPost + userspoints;
                 Points.saveNewPoints(pointid, newpointstobesaved);
             }
         }

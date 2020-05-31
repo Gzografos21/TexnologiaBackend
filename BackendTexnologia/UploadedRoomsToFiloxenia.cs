@@ -50,6 +50,7 @@ namespace BackendTexnologia
 
         string connectionString = @"server=localhost;user id=root; password=****; persistsecurityinfo=True;database=TexnologiaVasi";
 
+
         public bool saveRoomToUploadedRoomsToFiloxenia(int userID, string city, string country, int persons, double squareMeters, DateTime startingDate, DateTime endingDate, string information, string uploadedPhotos)
         {
 
@@ -108,12 +109,10 @@ namespace BackendTexnologia
 
         if (checkSaved == true)
         {
-            //kaloume tin increasePoints apo tin klasi Points
 
-
-            //an isxuei i sunthiki gia kathe oloklirwmeni anartisi dwmatiou pairnei 1500 pontous ara to vazoume default
+            //an isxuei i sunthiki gia kathe oloklirwmeni anartisi dwmatiou pairnei 10000 pontous
             int earnedPointsUploadFiloxenia = 10000;
-            //edw tha ginei select apo to table me tous pontous kai tha to apothikeui se mia metavliti savedPoints
+          
             List<int> PointTable = new List<int>();
 
             PointTable = Points.getUsersPoints(userID);
@@ -122,7 +121,7 @@ namespace BackendTexnologia
             pointid = Pointtable[0];
             userspoints = Pointtable[1];
             int newpointstobesaved = 0;
-            newpointstobesaved = earnedPointsUploadFiloxenia + userpoints;
+            newpointstobesaved = earnedPointsUploadFiloxenia + userspoints;
 
             Points.SaveNewPoints(pointid, newpointstobesaved);
         }
