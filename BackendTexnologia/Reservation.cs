@@ -9,14 +9,12 @@ namespace BackendTexnologia
     {
         private DateTime dateOfDeparture;
         private DateTime dateOfArrival;
-        private bool freeChangeToDates; //giorgos
-
+        
         string connectionString = @"server=localhost;user id=root; password=****; persistsecurityinfo=True;database=TexnologiaVasi";
 
         public List<string> retrieveReservations(string userID)//to userID to pairnoume kathe fora metaxu twn selidwn me session
         {
             {
-                //endeiktikes entoles gia to pws tha mporouse na ginei enas elegxos sti vasi gia ta reservations
                 bool check = false;
                 //exoume mia upothetiki vasi pou onomazetai TexnologiaVasi
                 //tha kanoume 4 select sta 4 upothetika tables: reservedTickets, reservedHostels, reservedRoomsToFiloxenia, reservedTravelPackages
@@ -77,6 +75,10 @@ namespace BackendTexnologia
 
         }
         public abstract bool saveReservation()
+        {
+
+        }
+
        
     
     }

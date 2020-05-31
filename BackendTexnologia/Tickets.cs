@@ -101,8 +101,20 @@ namespace BackendTexnologia
         //kai me vasi auti ti metabliti mporoume na sunexisoume
         bool checksavedReserv = false;
         bool paymentcheck = false;
-        //edw tha kaleitai to exwteriko sustima tis trapezas gia na paroume pisw ena true ii false an exei ginei i oxi i sunalagi(elegxos apo to exwteriko sustima tis trapezas) 
-        //kai to apothikeuoume sti metavliti paymentcheck
+
+        //edw tha kaleitai i pay i opoia epikoinwnei me to exwteriko sustima tis trapezas gia na paroume pisw ena true ii false an exei ginei i oxi i sunalagi(elegxos apo to exwteriko sustima tis trapezas) 
+        //pairnoume epomenws tin paymentcheck
+        //ara edw kaloume tin pay() gia na paroume tin timi tou paymentcheck
+        bool paymentcheck = false;
+        Tickets ps = new Tickets();
+        double FinalPrice = priceOfArrivalTickets + priceOfDepartureTickets;
+
+        paymentcheck = ps.pay(userID, FinalPrice);
+
+
+
+
+
         if (paymentcheck = true)
         {
             try
@@ -163,28 +175,85 @@ namespace BackendTexnologia
             Points.SaveNewPoints(pointid, newpointstobesaved);
         }
     }
-    public bool saveReservationChange()
+    public bool saveReservationChange(int userID, string placeOfDeparture, string placeOfArrival, DateTime dateOfDeparture, DateTime dateOfArrival, string Company, double priceOfDepartureTickets, double priceOfArrivalTickets, string TravelMethod, double extraPrice)
     {
         //Gia na ginei i allagi kratisis tha prepei na xanaginei oli i diadikasia elegxou diathesimotitas gia tis nees imerominies 
         //kai na kalountai opoies methodoi xreiazontai xana
         //efoson uparxei diathesimotita
         //an o xristis kanei allagi se imerominies eisitiriwn tote tha kanei update tis kainouries imerominies sto table reservedTickets
+
+        //an einai upgraded (upgraded = true)
+        //dikaioutai dwrean allagi kratisis se imerominies
+
+        //an einai basic (upgraded = false) tha tou emfanizei duo epiloges
+        //eite na plirwsei kapoia extra xrimata
+        //eite na kanei anabathmisi tou logariasmou tou
+
+        //ara vazoume tin epilogi tou xristi se mia metabliti
+        bool checksavedchanges = false;
+        string choice;
+        if (choice == "Extra Pay")
+        {
+            bool paymentcheck = false;
+            Tickets tc = new Tickets();
+
+            paymentcheck = tc.pay(userID, extraPrice);
+            if (paymentcheck == true)
+            {
+                //se auto to simeio kanei update sti vasi tis nees imeromnies tis kratisis
+                checksavedchanges = true;
+                
+                return checksavedchanges;
+            }
+            else
+            {
+                return checksavedchanges;
+            }
+        }
+        else if(choice=="upgrade")
+        {
+            bool checkupgraded = false;
+            Tickets tk = new Tickets();
+
+            checkupgraded = tk.upgrade(userID);
+
+            if (checkupgraded == true)
+            {
+                checksavedchanges = true;
+                return checksavedchanges;
+                //se auto to simeio kanei update sti vasi tis nees imeromnies tis kratisis
+            }
+            else
+            {
+                return checksavedchanges;
+            }
+        }
+
     }
 
-    //otan o xristis epilexei oti thelei na kanei allagi kratisis
-    //se imerominies tote tha tou emfanizei duo epiloges
-    //eite na plirwsei kapoia extra xrimata
-    //eite na kanei anabathmisi tou logariasmou tou
-    //(otan exei anabathmisi ton logariasmo tou dikaioutai dwrean allagi kratisis se imerominies)
 
-    public void upgrade()//otan o xristis epilexei oti thelei na anavathmisi ton logariasmo tou tha tou emfanizei ti selida anavathmisis logariasmou
+    public bool upgrade(int userID)//otan o xristis epilexei oti thelei na anavathmisi ton logariasmo tou tha tou emfanizei ti selida anavathmisis logariasmou
     {
+        bool checkupgraded = false;
+        //pigenei stin account elegxei an exei kanei upgrade iii oxi
+        //kai an exei kanei 
+        //tote dikaioutai dwrean allagi imerominiwn
+        //ara den xreiazetai na ginei pay
+        //ara epistrefei mia metavliti 
+        return checkupgraded;
+
 
     }
 
-    public void pay()//otan o xristis epilexei na plirwsei tha ton stelnei sto exwteriko sustima tis trapezas
+    public bool pay(int userID, double FinalPrice)//otan o xristis epilexei na plirwsei tha ton stelnei sto exwteriko sustima tis trapezas
     {
+        bool paymentcheck = false;
+        //arxikopoioume tin paymentcheck
+        //se auto to simeio tha epikoinwnei to europemoov me to sustima tis trapezas 
+        //kai an exei ginei i plirwmi stin trapeza tha apothikeuetai se mia metavliti paymentcheck=true; iii paymentcheck=false; an den exei ginei
 
+
+        return paymentcheck;
     }
 
 
