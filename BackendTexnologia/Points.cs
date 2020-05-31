@@ -8,79 +8,123 @@ namespace BackendTexnologia
     public class Points
     {
         private int collectedPoints;
-        private int pointsForBackpack;
-        private int pointsForDiscountedHostel;
-        private int pointsForFreeTrip;
-        private int redeemedPoints;
+        private int pointsForBackpack = 30000;
+        private int pointsForDiscountedHostel = 50000;
+        private int pointsForFreeTrip = 100000;
         private int remainingPointsToBackpack;
         private int remainingPointsToDiscountedHostel;
         private int remainingPointsToFreeTrip;
 
-        public bool increasePoints()
+        string connectionString = @"server=localhost;user id=root; password=****; persistsecurityinfo=True;database=TexnologiaVasi";
+
+        public List<int> getUsersPoints(int userID)//pairnei orismata userID, earnedPoints
         {
-            //methodos i opoia tha kaleitai etsi wste na sugentrwnei olous tous pontous apo kathe energeia pou kanei
-            //ousiastika i increasePoints tha einai dilwmeni se auti tin klasi kai tha kaleitai opou xreiazetai
-            //gia paradeigma an eimaste sti selida invite a friend, me to pou ginei h epilogi "send invitation" tha prepei na kaleitai
-            //i methodos increasePoints kai tha pairnei orismata pithanws diafora orismata opws tous sugekrimenous pontous gia kathe periptwsi
-            // to swma tis increasePoints tha apoteleitai sigoura apo delete kai insert gia ti vasi dedomenwn
-            //kai mporei na mpei sto table Users mia stili me tous pontous tou xristi kai kathe fora pou tha kaleitai auti i methodos
-            // kanontas praxeis mesa stin methodo tha anoigei ti vasi tha kanei delete tous proigoumenous pontous tou xristi kai insert sti sugekrimeni stili kai grammi (diladi me vasi to userid tou xristi)
-            //tous kainourious pontous tou xristi 
-            //episis kai se autin tin periptwsi tha prepei na xrisimopoiithei to session gia na perasoun to user id etsi wste na xeroume gia poion xristi sugekrimena kanoume insert kai delete tous pontous tou
+            //me auti ti methodo pame kai pairnoume tous pontous pou exei mazepsei o xristis me to sugekrimeno id
+            //Tha epistrefei
+            List<int> getpointsandpoitnid = new List<int>();
+            //select PointID, Points from tblPoints where UserID = '"userID"';
+            while (dataReader.Read())
+            {
+                getpointsandpoitnid.Add(reader.getInt32(0));//PointID
+                collectedPoints = reader.getInt32(1);
+                getpointsandpoitnid.Add(collectedPoints);//Points
+                return getpointsandpoitnid;
+                cnn.Close();
+            }
+        }
+        //to table point exei treis steiles
+        //to PointID(Primary Key), userID(Foreign Key), collectedPoints
+
+        public bool saveNewPoints(string PointID, int increasedpoints)
+        {
+            //Update tblPoints where PointID=PointID
 
         }
-
         public bool checkPoints()
         {
-            //edw tha ginetai select apo ti vasi gia na vriskoume akrivws ta points tou sugekrimenou xristi
+            //edw tha ginetai elegxos an oi collectedPoints tou sugekrimenou User 
+            //einai megaluteroi ii isoi apo tous pontous pou xreiazontai gia to backpack, tin ektpwsi sto hostel kai to dwrean taxidi
+            //tha kaleitai otan o xristis epilexei oti thelei na kanei exargurwsi pontwn
+            //An oi pontoi eparkoun tha ginetai exargurwsi, an den eparkoun tha tou proteinei tropous na sulexei pontous
+
+            //tha pigenei sti selida Points
+            //tha pataei redeem Points
+            //kai to sustima tha elegxei an oi pontoi eparkoun gia exargurwsi
+            //gia paradeigma an einai gia to backpack
+            //tha kanei select sti vasi gia na parei tous pontous kai tha tous apothikeusei se mia metabliti collectedPoints
+            bool check = false;
+            if (collectedPoints >= pointsForBackpack)
+            {
+                //an isxuei i sunthiki
+                check = true;
+                return check;
+            }
+            else
+            {
+                return check;
+            }
         }
 
-        public string displayRedeemChoices()
+        public List<string> displayRedeemChoices()
         {
-            //select apo ti vasi gia emfanisi twn epilogwn exargurwsis
-            //analoga me tous pontous pou exei sugentrwsei o xristis gia to backpack kai tis ekptwseis
+            //analoga me tous pontous pou exei sulexei o xristis tha tou emfanizei
+            //diaforetikous tropous exargurwsis pontwn
+            //px an o xristis exei sulexei 60000 pontous tha tou emfanizei 2 epiloges
+            //2 backpack(30000 pontoi to kathena)
+            //ekptwsi se hostel (50000 pontoi) kai tou menoun 10000 pontoi
+
         }
 
-        public string substractPoints()
+        public void substractPoints()
         {
-            //edw tha afairei tous exargurwmenous pontous
+            //prwta kaloume tin checkPoints gia na doume an exei tous pontous pou xreiazetai
+            // kai apothikeuoume tous pontous se mia metavliti 
+            //afairoume apo tous pontous pou exei epilexei tous pontous pou exargurwnei o xristis
+
+            //kai meta kaloume tin saveNewPoints etsi wste na ginoun update sti vasi oi kainourioi pontoi
+            //edw tha ginontai diafores praxeis gia tous pontous analoga otan prostithontai kai otan ginetai exargurwsi pontwn
         }
 
-        public static void bookTravelPackage()
+        //an o xristis den exei arketous pontous gia exargurwsi 
+        //tha tou emfanizei proteinomenous tropous gia na mazepsei pontous
+        //gia paradeigma an o xristis epilexei na kleisei taxidiwtiko paketo
+        //tha ton stelnei sti selida Book Travel Package
+        //omoiws gia ta upoloipa
+
+        public void bookTravelPackage()
         {
-            //ton pigenei stin othoni kleisimatos taxidiwtikou paketou, otan epilexei na kleisei taxidiwtiko paketo
+            
         }
 
-        public static void inviteAFriend()
+        public void inviteAFriend()
         {
-            //ton pigenei stin othoni prosklisis filou, otan epilexei na proskalesei filo 
+
         }
 
-        public static void reservationToFiloxenia()
+        public void reservationToFiloxenia()
         {
-            //ton pigenei stin othoni kratisis dwmatiou sto Filoxenia
+
         }
 
-        public static void uploadToFiloxenia()
+        public void uploadToFiloxenia()
         {
-            //othoni anartisis dwmatiou sto Filoxenia
+
         }
 
-        public static void bookHostel()
+        public void bookHostel()
         {
-            //othoni kratisis Hostel
+
         }
 
-        public static void bookTickets()
+        public void bookTickets()
         {
-            //othoni kratisis eisitiriwn
+
         }
 
-        public static void post()
+        public void post()
         {
-            //othoni dimosieusis taxidiwtikou periexomenou
-        }
 
+        }
     }
 
 }

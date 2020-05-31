@@ -5,44 +5,54 @@ using System.Web;
 
 namespace BackendTexnologia
 {
-    public class StudentPremium:Account
+    string connectionString = @"server=localhost;user id=root; password=****; persistsecurityinfo=True;database=leafletdb";
+    public class StudentPremium : Account
     {
-		private string studentID;
+        private string studentCode;
+        private string university;
+        //
 
-        public bool checkStudentID()
+        public bool checkStudentCode(int userID, string studentCode, string university)
         {
-            //auto den ginetai sti vasi, tha uparxei sustima me to opoio tha epikoinwnoume me to ekastote panepistimio 
+            //tha uparxei sustima me to opoio tha epikoinwnoume me to ekastote panepistimio 
             //ousiastika tha epikooinwnei me ti vasi dedomenwn twn allonwn panepistimiwn
             //apaitountai eidikes adeies gia ti sugekrimeni methodo kai pithanos exwterika ergaleia kai diaforetikes entoles analoga 
             //me ti vasi pou xrisimopoiei to kathe panepistimio
-            //kai sigoura tha xreiastei try catch edw se periptwsi provlimatos tis vasis tou panepistimiou
+            //tha pairnei san orisma to code pou dinei o xristis (to am tou diladi) kai to panepistimiou pou spoudazei
+            //edw mporei na uparxei ena automato sustima elegxou me ola ta panepistimia
+            //tha pairnoume apantisi gia to an autos o xristis einai ontws foititis tha tin apothikeuoume se mia metavliti
+            bool checkstudent;
+            return checkstudent;
+
 
         }
-        public bool saveStudentID()
+        public bool saveStudentCode(string userID, string studentCode, string university)
         {
-            bool check = true;
+            //kaloume tin checkStudentCode
+            bool checkstudent = false;
+            StudentPremium sp = new StudentPremium();
+            checkstudent = sp.checkStudentCode(userID, studentCode, university);
 
-            //prepei na ginei boolean kathws prepei na xeroume an egine ontws i apothikeusi sti vasi
-            //prosthetoume ena try catch gia ton elegxo sti vasi kathws einai exwteriko sustima i vasi dedomenwn 
-            //kai an gia opoiondipote logo exoume provlima me ti vasi
-            //kai skasei na mporoume na epistrepsoume false
-            try
+
+            bool checksaved = true;
+            if (checkstudent == true)
             {
-                //endeiktika kapoies entoles gia ti sundesi me ti vasi wste na kanoume insert xrisimopoiontas MySql kai MySql Workbench
-                string connectionString = @"server=localhost;user id=root; password=****; persistsecurityinfo=True;database=leafletdb";
-                MySqlConnection cnn = new MySqlConnection(connectionString);
-                cnn.Open();
-                //Gia paradeigma to insert tha mporouse na einai kapws etsi
-                string sql = "INSERT INTO User (StudentId) VALUES ('" + StuID + "')";
-                MySqlCommand command = new MySqlCommand(sql, cnn);
-                command.ExecuteReader();
-                cnn.Close();
-                return check;
-            }
-            catch
-            {
-                check = false;
-                return check ;//epsitrefoume error se periptwsi pou "skasei i vasi" kai den apothikeutei to id
+                try
+                {
+                    string connectionString = @"server=localhost;user id=root; password=****; persistsecurityinfo=True;database=TexnologiaVasi";
+                    MySqlConnection cnn = new MySqlConnection(connectionString);
+                    cnn.Open();
+                    string sql = "INSERT INTO Accounts (StudentCode) VALUES ('" + studentCode + "')";
+                    MySqlCommand command = new MySqlCommand(sql, cnn);
+                    command.ExecuteReader();
+                    cnn.Close();
+                    checksaved = true;
+                    return checksaved;
+                }
+                catch
+                {
+                    return checksaved;//epsitrefoume error se periptwsi pou "skasei i vasi" kai den apothikeutei to id
+                }
             }
         }
     }
