@@ -1,24 +1,32 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace BackendTexnologia
+namespace TexnologiaProject
 {
     public class UploadedRoomsToFiloxenia
     {
         private string city;
         private string country;
         private int persons;
-        private double squareMeters;
         private DateTime startingDate;
         private DateTime endingDate;
         private string information;
-        private bool photos;
+
         private string uploadedPhotos;
         private int earnedPointsUploadFiloxenia;
 
         //estw oti apothikeuoume ta tetragwnika pou vazei o xristis se mia metavliti pou onomazetai squareMeters
+
+        //estw oti to userID=1 photos=true kai squaremeters=15
+
+        //int userID = 1;
+        //bool photos = true;
+        //double squareMeters = 15;
+
+
         public bool checkSquareMeters(int userID, double squareMeters)
         {
             bool check = false;
@@ -48,10 +56,9 @@ namespace BackendTexnologia
             }
         }
 
-        string connectionString = @"server=localhost;user id=root; password=****; persistsecurityinfo=True;database=TexnologiaVasi";
 
 
-        public bool saveRoomToUploadedRoomsToFiloxenia(int userID, string city, string country, int persons, double squareMeters, DateTime startingDate, DateTime endingDate, string information, string uploadedPhotos)
+        public bool saveRoomToUploadedRoomsToFiloxenia(int userID, string city, string country, int persons, double squareMeters, DateTime startingDate, DateTime endingDate, string information, bool photos, string uploadedPhotos)
         {
 
             //kaloume tis duo methodous checkSquareMeters() kai checkForUpladedPhotos() 
@@ -59,12 +66,16 @@ namespace BackendTexnologia
 
             bool checkphotos = false;
             UploadedRoomsToFiloxenia cp = new UploadedRoomsToFiloxenia();
-            checkphotos = cp.checkForUploadedPhotos();
+            checkphotos = cp.checkForUploadedPhotos(userID, photos);
 
             bool checksquare = false;
             UploadedRoomsToFiloxenia cs = new UploadedRoomsToFiloxenia();
-            checksquare = cs.checkSquareMeters();
+            checksquare = cs.checkSquareMeters(userID, squareMeters);
+
+
+
             bool checksavedRoom = false;
+            string connectionString = @"server=localhost;user id=root; password=4040; persistsecurityinfo=True;database=texnologiavasi";
 
             if (checksquare == true && checkphotos == true)
             {
@@ -74,9 +85,11 @@ namespace BackendTexnologia
                 {
                     MySqlConnection cnn = new MySqlConnection(connectionString);
                     cnn.Open();
-                    string sql = "INSERT INTO Rooms (userID, city, country, persons, startingDate, endingDate,information, square, uploadedPhotos) VALUES('" + userID + "''" + city + "', '" + country + "', '" + persons + "','" + startingDate + "','" + endingDate + "','" + squareMeters + "','" + information + "','" + uploadedPhotos + "')";
+                    string sql = "INSERT INTO texnologiavasi.rooms (userid, city, country, persons, startingDate, endingDate, information, square, uploadedPhotos) VALUES('" + userID + "', '" + city + "', '" + country + "', '" + persons + "',@startingDate, @endingDate , '" + information + "','" + squareMeters + "','" + uploadedPhotos + "')";
                     MySqlCommand command = new MySqlCommand(sql, cnn);
-                    command.ExecuteCommand();
+                    command.Parameters.AddWithValue("@startingDate", startingDate);
+                    command.Parameters.AddWithValue("@endingDate", endingDate);
+                    MySqlDataReader dataReader = command.ExecuteReader();//ektelei tin entoli command kai to apotelesma to apothikeuei se enan reader tis mysql
                     cnn.Close();
                     checksavedRoom = true;
 
@@ -85,7 +98,7 @@ namespace BackendTexnologia
                     //alliws pigenei sto catch kai epistrefei tin arxikopoiimeni timi false
 
                 }
-                catch
+                catch (Exception ex)
                 {
                     return checksavedRoom;
                 }
@@ -96,35 +109,44 @@ namespace BackendTexnologia
                 return checksavedRoom;
             }
         }
-
-    }
-
-    public bool increasePointsUploadRoom()
-    {
-        //exoume allo ena upothetiko table gia tous pontous tou xristi, opou mesa tha exei to userid tou xristi kai tous sunolikous tou pontous
-        //tha kalesoume tin saveRoomToUploadedRoomsToFiloxenia kai me vasi to checksavedRoom an einai true i false tha proxwrisoume
-        string checkSaved = "";
-        UploadedRoomsToFiloxenia sr = new UploadedRoomsToFiloxenia();
-        checkSaved = sr.saveRoomToUploadedRoomsToFiloxenia();
-
-        if (checkSaved == true)
+        public bool IncreasePointsUploadRoom(int userID, string city, string country, int persons, double squareMeters, DateTime startingDate, DateTime endingDate, string information, bool photos, string uploadedPhotos)
         {
+            //exoume allo ena upothetiko table gia tous pontous tou xristi, opou mesa tha exei to userID(foreign key), PointID(primary key) kai collectedPoints
+            //tha kalesoume tin saveRoomToUploadedRoomsToFiloxenia kai me vasi to checksavedRoom an einai true i false tha proxwrisoume
 
-            //an isxuei i sunthiki gia kathe oloklirwmeni anartisi dwmatiou pairnei 10000 pontous
+            //UploadedRoomsToFiloxenia sr = new UploadedRoomsToFiloxenia();
+            //checkSaved = sr.saveRoomToUploadedRoomsToFiloxenia(userID, city, country, persons, squareMeters, startingDate, endingDate, information, photos, uploadedPhotos);
+
+            bool checkSaved = true;
             int earnedPointsUploadFiloxenia = 10000;
-          
-            List<int> PointTable = new List<int>();
 
-            PointTable = Points.getUsersPoints(userID);
+            List<int> PointTable = new List<int>();
+            Points pointclass = new Points();
+
+            PointTable = pointclass.getUsersPoints(userID);
             int pointid = 0;
             int userspoints = 0;
-            pointid = Pointtable[0];
-            userspoints = Pointtable[1];
+            pointid = PointTable[0];
+            userspoints = PointTable[1];
             int newpointstobesaved = 0;
             newpointstobesaved = earnedPointsUploadFiloxenia + userspoints;
+            //estw oti to point id einai 2
 
-            Points.SaveNewPoints(pointid, newpointstobesaved);
+            int pointID = 1;
+
+            Points np = new Points();
+            bool newpoints = false;
+            newpoints = np.saveNewPoints(pointID, newpointstobesaved);
+
+            if (newpoints == true)
+            {
+                checkSaved = true;
+                return checkSaved;
+            }
+            else
+            {
+                return checkSaved;
+            }
         }
     }
-
 }
